@@ -1,0 +1,67 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+    }
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'no.nils:wsdl2java:0.10'
+    }
+
+
+}
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'no.nils.wsdl2java'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web')
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '1.2.1.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-frontend-jaxws
+    compile group: 'org.apache.cxf', name: 'cxf-rt-frontend-jaxws', version: '3.2.0'
+    // https://mvnrepository.com/artifact/org.apache.cxf/cxf-tools-wsdlto-frontend-jaxws
+    compile group: 'org.apache.cxf', name: 'cxf-tools-wsdlto-frontend-jaxws', version: '3.2.0'
+
+    compile group: 'org.apache.cxf', name: 'cxf-rt-ws-policy', version: '3.2.0'
+
+
+
+    // https://mvnrepository.com/artifact/org.apache.cxf/cxf-tools-wsdlto-databinding-jaxb
+    compile group: 'org.apache.cxf', name: 'cxf-tools-wsdlto-databinding-jaxb', version: '3.2.0'
+    // https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-transports-http-jetty
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http-jetty', version: '3.2.0'
+    // https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-bindings-soap
+    compile group: 'org.apache.cxf', name: 'cxf-rt-bindings-soap', version: '3.2.0'
+    // https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-transports-http
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: '3.2.0'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+wsdl2java {
+    wsdlsToGenerate = [
+            ['-p', 'com.abm.weatherxnet', '-autoNameResolution', "$projectDir/src/main/resources/wsdl/Weather.wsdl"]
+    ]
+    generatedWsdlDir = file("$projectDir/generatedsources")
+    wsdlDir = file("$projectDir/src/main/resources/wsdl")
+}
+
+wsdl2javaExt {
+    cxfVersion = "3.2.0"
+}
